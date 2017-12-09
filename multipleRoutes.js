@@ -8,33 +8,34 @@ var PORT1 = 7000;
 // Create a generic function to handle requests and responses
 function handleRequest(req, res) {
 
+  //console.log(req);
   // Capture the url the request is made to
   var path = req.url;
+
+  var filePath = path + ".html";
 
   // Depending on the URL, display a different HTML file.
   switch (path) {
 
     case "/":
-      return displayRoot(path, req, res);
+      return openPage("/home.html", req, res)
 
     case "/favoriteCSS":
-      return displayCSS(path, req, res);
+      return openPage(filePath, req, res)
 
     case "/favoriteMovies":
-      return displayMovies(path, req, res);
+      return openPage(filePath, req, res)
 
     case "/favoriteFoods":
-      return displayFoods(path, req, res);
+      return openPage(filePath, req, res)
 
     default:
       return display404(path, req, res);
   }
 }
 
-
-function displayRoot(url, req, res) {
-
-  fs.readFile(__dirname + "/home.html", function (err, data) {
+function openPage(path, req, res) {
+  fs.readFile(__dirname + path, function (err, data) {
 
     // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
     // an html file.
@@ -44,54 +45,16 @@ function displayRoot(url, req, res) {
     res.end(data);
   });
 }
-
-function displayCSS(url, req, res) {
-
-  fs.readFile(__dirname + "/favoriteCSS.html", function (err, data) {
-
-    // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
-    // an html file.
-    res.writeHead(200, {
-      "Content-Type": "text/html"
-    });
-    res.end(data);
-  });
-}
-
-function displayMovies(url, req, res) {
-
-  fs.readFile(__dirname + "/favoriteMovies.html", function (err, data) {
-
-    // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
-    // an html file.
-    res.writeHead(200, {
-      "Content-Type": "text/html"
-    });
-    res.end(data);
-  });
-}
-
-function displayFoods(url, req, res) {
-
-  fs.readFile(__dirname + "/favoriteFoods.html", function (err, data) {
-
-    // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
-    // an html file.
-    res.writeHead(200, {
-      "Content-Type": "text/html"
-    });
-    res.end(data);
-  });
-}
-
 // When someone visits any path that is not specifically defined, this function is run.
 function display404(url, req, res) {
-  var myHTML =  "<html>" +
+  var myHTML = "<html>" +
     "<body><h1>404 Not Found </h1>" +
     "<p>The page you were looking for: " + url + " can not be found</p>" +
     "</body></html>";
 
-  res.writeHead(404, { "Content-Type": "text/html" });
+  res.writeHead(404, {
+    "Content-Type": "text/html"
+  });
   res.end(myHTML);
 }
 
